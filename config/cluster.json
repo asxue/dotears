@@ -1,0 +1,48 @@
+{
+    "__default__": {
+        "queue": "highp",
+        "memory": "4G",
+        "name": "{rule}",
+        "output": "/u/home/a/asxue/project-hjp/dotears/workflow/logs/{rule}.out",
+        "runtime": "2:00:00",
+        "threads": 1
+    },
+    "run_dotears_cv_std_raw": {
+        "memory": "2G",
+        "runtime": "48:00:00",
+    },
+    "run_dotears_obsonly_cv_std_raw": {
+        "memory": "2G",
+        "runtime": "48:00:00",
+    },
+    "run_dotears_cv_std_scaled": {
+        "memory": "2G",
+        "runtime": "48:00:00",
+    },
+    "run_notears_cv_std": {
+        "memory": "2G",
+        "runtime": "48:00:00"
+    },
+    "run_golem_ev_cv_std": {
+        "memory": "1G",
+        "runtime": "48:00:00",
+        "threads": 4
+    },
+    "run_golem_nv_cv_std": {
+        "memory": "1G",
+        "runtime": "48:00:00",
+        "threads": 4
+    },
+    "run_sortnregress_std": {
+        "memory": "2G",
+        "runtime": "1:00:00"
+    },
+    "run_direct_lingam_scaled": {
+        "memory": "2G",
+        "runtime": "1:00:00"
+    },
+    "run_dcdi_std": {
+        "memory": "10G",
+        "runtime": "1:00:00"
+    },
+}

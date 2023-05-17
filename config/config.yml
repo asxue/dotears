@@ -1,0 +1,3 @@
+lambda_file: 'data/lambdas.csv'
+alpha: 0.001
+alpha_inv: 0.001

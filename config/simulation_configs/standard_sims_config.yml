@@ -1,0 +1,14 @@
+p: 50
+d: 0.2
+k: 4
+lower_edge_range: 0.5
+upper_edge_range: 2.0
+lower_std_range: 0.5
+upper_std_range: 2.0
+n_sims: 100
+n: 100
+a: 4
+golem_lambda2_file: 'data/lambda2s.csv'
+output_dir: 'data/p50_high_density_strong_effects/'
+n_folds: 5
+dcdi_n_sims: 10

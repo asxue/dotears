@@ -1,0 +1,10 @@
+.snakemake
+logs/
+workflow/logs
+workflow/scripts/dcdi/data
+data/p*
+data/small
+data/archive
+run.qsub
+figures/
+workflow/scripts/__pycache__
