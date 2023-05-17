@@ -1,4 +1,4 @@
-# My Paper Title
+# dotears:Scalable, consistent DAG estimation using observational and interventional data
 
 This repository is the official implementation of [dotears:Scalable, consistent DAG estimation using observational and interventional data](https://arxiv.org/abs/2030.12345). 
 
