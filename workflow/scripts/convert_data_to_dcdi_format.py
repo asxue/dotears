@@ -48,9 +48,12 @@ if __name__ == '__main__':
     parser.add_argument('--n_sims', type=int, help='number of simulations')
     parser.add_argument('--small', action='store_true', help='specify a single dag file in small simulations')
     parser.add_argument('--small_dag_path', type=str, help='path to dag file in small simulations')
+    parser.add_argument('--dcdi', action='store_true', help='change sim numbers')
     args = parser.parse_args()
     
-    for i in range(args.n_sims):
+    lower = 1 if args.dcdi else 0
+    upper = 11 if args.dcdi else args.n_sims
+    for i in range(lower, upper):
         data_path = os.path.join(args.data_dir, 'sim_{}.npz'.format(i))
         
         if args.small:

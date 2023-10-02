@@ -20,21 +20,28 @@ def latent_normal(b_t, mu, var, n):
     
     return data
 
-def ko_struct(b_t, i, a):
+def ko_struct(b_t, i, a, parental_influence):
     ko_t = np.copy(b_t)
     
-    ko_t[i, :] = np.zeros((1, b_t.shape[0]))
-    ko_t[i, i] = b_t[i, i] / a ** 2
+    # ko_t[i, :] = np.zeros((1, b_t.shape[0])) 
+    ko_t[i, :] = np.ones((1, b_t.shape[0])) * np.sqrt(parental_influence)
+    ko_t[i, i] = b_t[i, i] / a
     return ko_t
 
-def gen_all_data_kos(b_t, mu, var, n, a):
+def gen_all_data_kos(b_t, mu, var, n, a, parental_influence=0, a_perturbation=False):
     p = b_t.shape[0]
     
     data = {}
     data['obs'] = latent_normal(b_t, mu, var, n).T
 
     for i in range(p):
-        b_ko = ko_struct(b_t, i, a)
+        if a_perturbation:
+            perturbation = np.random.uniform(0.8, 1.2)
+            a_i = a * perturbation
+        else:
+            a_i = a
+        b_ko = ko_struct(b_t, i, a_i, parental_influence)
+
         data[str(i)] = latent_normal(b_ko, mu, var, n).T
         
     return data
@@ -47,7 +54,7 @@ def scale_data(data):
         
     return data
 
-def gen_random_variances(sim_std_range):
+def gen_random_variances(sim_std_range, p):
     sim_std = np.random.uniform(*sim_std_range, size=p)
     return (sim_std ** 2).reshape(p, 1)
 
@@ -76,6 +83,8 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=None)
     parser.add_argument('--type', type=str, help='generate observational or interventional data')
     parser.add_argument('--cv', action='store_true', help='split data into cross validation folds')
+    parser.add_argument('--parental_influence', type=float, default=0)
+    parser.add_argument('--a_perturbation', action='store_true', help='perturb the variance of KO')
     args = parser.parse_args()
 
     np.random.seed(args.seed)
@@ -86,7 +95,7 @@ if __name__ == '__main__':
 
     # generate data 
     if args.random_var:
-        sim_var = gen_random_variances([args.std_lower_range, args.std_upper_range])
+        sim_var = gen_random_variances([args.std_lower_range, args.std_upper_range], p)
     else:
         sim_var = np.asarray(list(args.var)).reshape(p, 1)
 
@@ -96,7 +105,13 @@ if __name__ == '__main__':
     else:
         n = args.n
 
-    data = gen_all_data_kos(b_t, np.zeros((p, 1)), var=sim_var, n=n, a=args.a)
+    data = gen_all_data_kos(b_t, np.zeros((p, 1)), var=sim_var, n=n,
+                             a=args.a, parental_influence=args.parental_influence)
+
+    if args.a_perturbation:
+        data = gen_all_data_kos(b_t, np.zeros((p, 1)), var=sim_var, n=n, a=args.a, 
+            parental_influence=args.parental_influence, a_perturbation=True)
+        
 
     if is_observational:
         np.savez(args.out, obs=data['obs'])

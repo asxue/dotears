@@ -47,7 +47,7 @@ if __name__ == "__main__":
                         help='dataset index')
     parser.add_argument('--num-vars', required=True, type=int, default=2,
                         help='Number of variables')
-    parser.add_argument('--train-samples', type=int, default=0.8,
+    parser.add_argument('--train-samples', type=float, default=0.8,
                         help='Number of samples used for training (default is 80% of the total size)')
     parser.add_argument('--test-samples', type=int, default=None,
                         help='Number of samples used for testing (default is whatever is not used for training)')

@@ -12,6 +12,11 @@ def convert_npz_to_dict(npz_file):
         out[k] = v
     return out
 
+def concatenate_interventional_data(data):
+    mats = [v for k, v in data.items()]
+    return np.concatenate(mats).shape
+
+
 def cv_dotears(lambda1, train_data, val_data, obs_only=False):
     from dotears import DOTEARS
     dotears_obj = DOTEARS(train_data, lambda1=lambda1, w_threshold=0, scaled=False, obs_only=obs_only)
@@ -100,6 +105,11 @@ if __name__ == '__main__':
 
             if method == 'dcdi-g':
                 pass
+
+            if method == 'notears_interventional':
+                train_data_all = concatenate_interventional_data(train_data)
+                val_data_all = concatenate_interventional_data(val_data)
+                val_loss = cv_notears(params, train_data_all, val_data_all)
     
             loss_per_split = np.append(loss_per_split, val_loss)
 
@@ -137,6 +147,14 @@ if __name__ == '__main__':
         inferred_dag = notears_linear(data['obs'],
                        lambda1=lambda1,
                        w_threshold=0)
+    if method == 'notears_interventional':
+        from notears import notears_linear
+        lambda1 = best_performing_parameters['lambda'].values[0]
+        data_all = concatenate_interventional_data(data)
+        inferred_dag = notears_linear(data['obs'],
+                       lambda1=lambda1,
+                       w_threshold=0)
+
     if method.startswith('golem'):
         sys.path.append('./workflow/scripts/golem/src')
         sys.path.append('./workflow/scripts/golem/src/models')

@@ -45,7 +45,7 @@ if __name__ == '__main__':
         data = scale_data(data)
     print(data['obs'].var(axis=0))
 
-    # run sortnregress
     W_est = sortnregress(data['obs'], args.use_lasso)
+    
     # W_est[np.abs(W_est) < 0.3] = 0
     np.save(args.out, W_est)

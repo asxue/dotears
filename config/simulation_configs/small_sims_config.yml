@@ -2,5 +2,5 @@ a: 4
 beta_file: 'data/betas.txt' 
 sigma_1_file: 'data/sigma_1s.txt'
 n: 1000
-n_sims: 25
+n_sims: 10
 output_dir: 'data/small/'

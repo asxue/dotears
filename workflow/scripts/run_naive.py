@@ -23,6 +23,11 @@ if __name__ == '__main__':
     if args.method == 'DOTEARS':
         from dotears import DOTEARS
         w = run_dotears(data, lambda1=0)
+    elif args.method == 'dotears_no_omega':
+        from dotears import DOTEARS
+        DOTEARS_obj = DOTEARS(data, lambda1=0, scaled=False, w_threshold=0)
+        DOTEARS_obj.V_inverse = np.identity(DOTEARS_obj.p)
+        w = DOTEARS_obj.fit()
     elif args.method == 'NOTEARS':
         from notears import notears_linear
         w = run_notears(data, lambda1=0, w_threshold=0)

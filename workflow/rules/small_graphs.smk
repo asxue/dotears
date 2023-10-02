@@ -27,7 +27,7 @@ rule gen_interventional_small_graph_data:
         python workflow/scripts/gen_small_graph_data.py --w_template {input.w} --sigma_1 {input.sigma_1_file} --beta {input.beta_file} --n {params.n} --n_sims {params.n_sims} --a {params.a} --out {params.out_parent} --observational_data
         """
 
-rule run_dotears_naive:
+rule dotears_naive:
     input:
         join(small_config['output_dir'], 'data/interventional/{parent_dir}/sim_{sim}.npz')
     output:
@@ -39,7 +39,19 @@ rule run_dotears_naive:
         python workflow/scripts/run_naive.py --data {input} --method DOTEARS --out {output}
         """
 
-rule run_gies_naive:
+rule dotears_no_omega_naive:
+    input:
+        join(small_config['output_dir'], 'data/interventional/{parent_dir}/sim_{sim}.npz')
+    output:
+        join(small_config['output_dir'], 'out/dotears_no_omega/{parent_dir}/sim_{sim}.npy')
+    conda:
+        '../../workflow/envs/std.yml'
+    shell:
+        """
+        python workflow/scripts/run_naive.py --data {input} --method dotears_no_omega --out {output}
+        """
+
+rule gies_naive:
     input:
         join(small_config['output_dir'], 'data/interventional/{parent_dir}/sim_{sim}.npz')
     output:
@@ -51,7 +63,7 @@ rule run_gies_naive:
         Rscript workflow/scripts/gies.R --data {input} --out {output}
         """
 
-rule run_notears_naive:
+rule notears_naive:
     input:
         join(small_config['output_dir'], 'data/observational/{parent_dir}/sim_{sim}.npz')
     output:
@@ -63,7 +75,7 @@ rule run_notears_naive:
         python workflow/scripts/run_naive.py --data {input} --method NOTEARS --out {output}
         """
 
-rule run_sortnregress_naive:
+rule sortnregress_naive:
     input:
         join(small_config['output_dir'], 'data/observational/{parent_dir}/sim_{sim}.npz')
     output:
@@ -75,7 +87,7 @@ rule run_sortnregress_naive:
         python workflow/scripts/run_naive.py --data {input} --method sortnregress --out {output}
         """
 
-rule run_golem_ev_naive:
+rule golem_ev_naive:
     input:
         join(small_config['output_dir'], 'data/observational/{parent_dir}/sim_{sim}.npz')
     output:
@@ -87,7 +99,7 @@ rule run_golem_ev_naive:
         python workflow/scripts/run_naive.py --data {input} --method GOLEM-EV --out {output}
         """
 
-rule run_golem_nv_naive:
+rule golem_nv_naive:
     input:
         join(small_config['output_dir'], 'data/observational/{parent_dir}/sim_{sim}.npz')
     output:
@@ -99,7 +111,7 @@ rule run_golem_nv_naive:
         python workflow/scripts/run_naive.py --data {input} --method GOLEM-NV --out {output}
         """
 
-rule run_direct_lingam_naive:
+rule direct_lingam_naive:
     input:
         join(small_config['output_dir'], 'data/observational/{parent_dir}/sim_{sim}.npz')
     output:
@@ -111,7 +123,7 @@ rule run_direct_lingam_naive:
         python workflow/scripts/run_naive.py --data {input} --method direct-lingam --out {output}
         """
 
-rule run_igsp_naive:
+rule igsp_naive:
     input:
         join(small_config['output_dir'], 'data/interventional/{parent_dir}/sim_{sim}.npz')
     output:
@@ -126,7 +138,7 @@ rule run_igsp_naive:
         python workflow/scripts/igsp.py --data {input} --out {output} --alpha {params.alpha} --alpha_inv {params.alpha_inv}
         """
 
-rule run_ut_igsp_naive:
+rule ut_igsp_naive:
     input:
         join(small_config['output_dir'], 'data/interventional/{parent_dir}/sim_{sim}.npz')
     output:
@@ -162,7 +174,7 @@ rule convert_data_format_dcdi_small:
         python workflow/scripts/convert_data_to_dcdi_format.py --data {params.in_dir} --out {params.out_dir} --n_sims {params.n_sims} --small_dag_path {params.dag_path} --small
         """
 
-rule run_dcdi_small:
+rule dcdi_small:
     input:
         join(small_config['output_dir'], 'temp/dcdi/interventional/{dag}/sigma1_{sigma}/beta_{beta}/data_interv{sim}.npy'),
         join(small_config['output_dir'], 'temp/dcdi/interventional/{dag}/sigma1_{sigma}/beta_{beta}/regime{sim}.csv'),
@@ -182,6 +194,8 @@ rule run_dcdi_small:
         """
         mkdir -p {params.out_dir}
         module load R/4.1.0-BIO
-        python workflow/scripts/dcdi/main.py --train --data-path {params.in_dir} --num-vars {params.p} --i-dataset {wildcards.sim} --exp-path {params.out_dir} --model DCDI-G --intervention --intervention-type perfect --intervention-knowledge known --reg-coeff 0
+        python workflow/scripts/dcdi/main.py --train --data-path {params.in_dir} --num-vars {params.p} \
+        --i-dataset {wildcards.sim} --exp-path {params.out_dir} --model DCDI-G --intervention --intervention-type perfect \
+        --intervention-knowledge known --reg-coeff 0 --num-layers 0 --normalize-data
         mv {params.out_dag} {output}
         """

@@ -4,7 +4,9 @@ workflow/logs
 workflow/scripts/dcdi/data
 data/p*
 data/small
+data/dcdi_sims
 data/archive
 run.qsub
 figures/
 workflow/scripts/__pycache__
+.vscode
