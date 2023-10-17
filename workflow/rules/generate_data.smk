@@ -65,7 +65,7 @@ rule generate_fixed_intervention_data:
         n=std_config['n'],
         std_lower_range=std_config['lower_std_range'],
         std_upper_range=std_config['upper_std_range'],
-        cv_seed='{sim}' + str(std_config['n_sims']) # not beautiful but deterministic
+        cv_seed='{sim}' + str(std_config['n_sims']) + '0' # not beautiful but deterministic
     conda:
        '../../workflow/envs/dotears.yml'
     shell:
@@ -97,7 +97,8 @@ rule generate_parental_influence_data:
         std_lower_range=std_config['lower_std_range'],
         std_upper_range=std_config['upper_std_range'],
         a=std_config['a'],
-        cv_seed='{sim}' + str(std_config['n_sims']) # not beautiful but deterministic
+        cv_seed=lambda wildcards: wildcards.sim + str(std_config['n_sims']) + str(int(100 * float(wildcards.pi))) # not beautiful but deterministic
+ # not beautiful but deterministic
     conda:
        '../../workflow/envs/dotears.yml'
     shell:
@@ -129,7 +130,7 @@ rule generate_low_sample_size_data:
         std_lower_range=std_config['lower_std_range'],
         std_upper_range=std_config['upper_std_range'],
         a=std_config['a'],
-        cv_seed='{sim}' + str(std_config['n_sims']) # not beautiful but deterministic
+        cv_seed='{sim}' + str(std_config['n_sims']) + '1' # not beautiful but deterministic
     conda:
        '../../workflow/envs/dotears.yml'
     shell:
@@ -161,7 +162,7 @@ rule generate_alpha_perturb_data:
         std_lower_range=std_config['lower_std_range'],
         std_upper_range=std_config['upper_std_range'],
         a=std_config['a'],
-        cv_seed='{sim}' + str(std_config['n_sims']) # not beautiful but deterministic
+        cv_seed='{sim}' + str(std_config['n_sims']) + '2'# not beautiful but deterministic
     conda:
        '../../workflow/envs/dotears.yml'
     shell:

@@ -17,6 +17,7 @@ if __name__ == '__main__':
     parser.add_argument('--out_dir', type=str, help='path to output directory')
     parser.add_argument('--intervention_type', type=str, help='perfect or imperfect intervention')
     parser.add_argument('--num_layers', type=int, help='number of hidden lyaers')
+    parser.add_argument('--model', type=str, help='model', default='DCDI-G')
     args = parser.parse_args()
 
     df = pd.DataFrame(columns=['lambda', 'loss'])
@@ -37,7 +38,7 @@ if __name__ == '__main__':
     chosen_lambda = df.loc[df['loss'] == df['loss'].min(), 'lambda'].values[0]
 
     os.system(f'python workflow/scripts/dcdi/main.py --train --data-path {args.in_dir} --num-vars {args.p} \
-                --i-dataset {args.sim} --exp-path {args.out_dir} --model DCDI-G --intervention \
+                --i-dataset {args.sim} --exp-path {args.out_dir} --model {args.model} --intervention \
                 --intervention-type {args.intervention_type} \
                 --intervention-knowledge known --reg-coeff {chosen_lambda} --num-layers {args.num_layers} \
                 --normalize-data')

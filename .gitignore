@@ -10,3 +10,4 @@ run.qsub
 figures/
 workflow/scripts/__pycache__
 .vscode
+notebooks

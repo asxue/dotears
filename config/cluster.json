@@ -55,11 +55,11 @@
     },
     "dcdi": {
         "memory": "100G",
-        "runtime": "12:00:00"
+        "runtime": "18:00:00"
     },
     "dcdi_cv": {
         "memory": "80G",
-        "runtime": "12:00:00"
+        "runtime": "18:00:00"
     },
     "dcdi_dcdi_sims": {
         "memory": "24G",

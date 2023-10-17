@@ -157,6 +157,7 @@ rule dcdi_cv_dcdi_sims:
         out_nll='data/dcdi_sims/out/{prefix}/dcdi-g/cv/sim{sim}/lambda{lambda1}/fold{fold}/train/nlls.pkl',
         # p=std_config['p'],
         intervention_type=lambda wildcards: 'imperfect' if ('imperfect' in wildcards.prefix) else 'perfect',
+        model=lambda wildcards: 'DCDI-DSF' if (('_nn_' in wildcards.prefix) or ('_nn_add_' in wildcards.prefix) or ('_nnadd_' in wildcards.prefix)) else 'DCDI-G',
         num_layers=lambda wildcards: 2 if (('_nn_' in wildcards.prefix) or ('_nn_add_' in wildcards.prefix) or ('_nnadd_' in wildcards.prefix)) else 0
     envmodules:
         'R/4.1.0-BIO'
@@ -168,7 +169,7 @@ rule dcdi_cv_dcdi_sims:
         """
         mkdir -p {params.out_dir} 
         python workflow/scripts/dcdi/main.py --train --data-path {params.in_dir} --num-vars 10 --i-dataset {wildcards.fold} \
-        --exp-path {params.out_dir} --model DCDI-G --intervention --intervention-type {params.intervention_type} \
+        --exp-path {params.out_dir} --model {params.model} --intervention --intervention-type {params.intervention_type} \
         --intervention-knowledge known --reg-coeff {wildcards.lambda1} --num-layers 0 --normalize-data
         mv {params.out_nll} {output}
         rm -r {params.out_dir}
@@ -192,6 +193,7 @@ rule dcdi_dcdi_sims:
         out_dag='data/dcdi_sims/out/{prefix}/dcdi-g/sim{sim}/train/DAG.npy',
         # p=std_config['p'],
         intervention_type=lambda wildcards: 'imperfect' if ('imperfect' in wildcards.prefix) else 'perfect',
+        model=lambda wildcards: 'DCDI-DSF' if (('_nn_' in wildcards.prefix) or ('_nn_add_' in wildcards.prefix) or ('_nnadd_' in wildcards.prefix)) else 'DCDI-G',
         num_layers=lambda wildcards: 2 if (('_nn_' in wildcards.prefix) or ('_nn_add_' in wildcards.prefix) or ('_nnadd_' in wildcards.prefix)) else 0,
         lambda_file=config['lambda_file'],
         n_folds=std_config['n_folds']
@@ -206,7 +208,7 @@ rule dcdi_dcdi_sims:
         mkdir -p {params.out_dir}
         python workflow/scripts/dcdi_cv.py --lambda_file {params.lambda_file} --nll_dir {params.nll_dir} \
                 --n_folds {params.n_folds} --in_dir {params.in_dir} --p 10 --sim {wildcards.sim} \
-                --out_dir {params.out_dir} --intervention_type {params.intervention_type} --num_layers 0
+                --out_dir {params.out_dir} --intervention_type {params.intervention_type} --num_layers 0 --model {params.model}
         mv {params.out_dag} {output}
         rm -r {params.out_dir}
         """
