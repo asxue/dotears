@@ -1,6 +1,6 @@
 # dotears:Scalable, consistent DAG estimation using observational and interventional data
 
-This repository is the official implementation of [dotears:Scalable, consistent DAG estimation using observational and interventional data](https://arxiv.org/abs/2030.12345). 
+This repository is the official implementation of [dotears:Scalable, consistent DAG estimation using observational and interventional data](https://arxiv.org/abs/2305.19215). 
 
 ## Requirements
 This repository uses snakemake for reproducible workflows. For installation, see the [snakemake installation instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
