@@ -459,8 +459,12 @@ def train(model, gt_adjacency, gt_interv, train_data, test_data, opt, metrics_ca
                                           "rev": rev,
                                           "nll_val": best_nll_val
                                           })
-
-                return model
+        if iter % 1000 == 0:
+            print('DAG SAVED ', time.time() - time0)
+            to_keep = (model.get_w_adj() > 0.5).type(torch.Tensor).detach().cpu().numpy()
+            current_adj = model.adjacency.detach().cpu().numpy() * to_keep
+            np.save(os.path.join(save_path, "DAG"), current_adj)
+    return model
 
 def retrain(model, train_data, test_data, dag_folder, opt, metrics_callback, plotting_callback):
     """

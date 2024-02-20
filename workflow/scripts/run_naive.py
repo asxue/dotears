@@ -17,6 +17,7 @@ if __name__ == '__main__':
     parser.add_argument('--data', type=str, help='path to input data file')
     parser.add_argument('--method', type=str, help='method to run', required=True)
     parser.add_argument('--out', type=str, help='path for output')
+    parser.add_argument('--lambda1', type=float, default=0)
     args = parser.parse_args()
 
     data = dict(np.load(args.data))
@@ -30,7 +31,7 @@ if __name__ == '__main__':
         w = DOTEARS_obj.fit()
     elif args.method == 'NOTEARS':
         from notears import notears_linear
-        w = run_notears(data, lambda1=0, w_threshold=0)
+        w = run_notears(data, lambda1=args.lambda1, w_threshold=0)
     elif args.method == 'sortnregress':
         from sortnregress import sortnregress
         w = sortnregress(data['obs'], use_lasso=False)
@@ -38,16 +39,16 @@ if __name__ == '__main__':
         sys.path.append('./workflow/scripts/golem/src')
         sys.path.append('./workflow/scripts/golem/src/models')
         import golem
-        w = golem.golem(copy.deepcopy(data['obs']), lambda_1=0, lambda_2=5.0,
+        w = golem.golem(copy.deepcopy(data['obs']), lambda_1=args.lambda1, lambda_2=5.0,
             equal_variances=True, seed=np.random.randint(0, 2**32-1))
     elif args.method == 'GOLEM-NV':
         sys.path.append('./workflow/scripts/golem/src')
         sys.path.append('./workflow/scripts/golem/src/models')
         import golem
         print(golem)
-        w_init = golem.golem(copy.deepcopy(data['obs']), lambda_1=0, lambda_2=5.0,
+        w_init = golem.golem(copy.deepcopy(data['obs']), lambda_1=args.lambda1, lambda_2=5.0,
             equal_variances=True, seed=np.random.randint(0, 2**32-1))
-        w = golem.golem(copy.deepcopy(data['obs']), lambda_1=0, lambda_2=5.0,
+        w = golem.golem(copy.deepcopy(data['obs']), lambda_1=args.lambda1, lambda_2=5.0,
             equal_variances=False, seed=np.random.randint(0, 2**32-1), B_init=w_init)
         print(w)
     elif args.method == 'direct-lingam':

@@ -27,7 +27,8 @@ class DOTEARS:
         self.scaled = scaled
         self.obs_only = obs_only
 
-        self.p = data['obs'].shape[1]
+#         self.p = data['obs'].shape[1]
+        self.p = list(data.values())[0].shape[1]
         self.V_inverse = (self.estimate_exogenous_variances(data) ** (-1)) * np.identity(self.p)
         
         self.scaled = scaled
@@ -38,7 +39,7 @@ class DOTEARS:
             self.data = scale_data(data)
     
     def estimate_exogenous_variances(self, data):
-        p = data['obs'].shape[1]
+        p = list(data.values())[0].shape[1]
         variances = np.zeros(p)
         for k, v in data.items():
             if k == 'obs':

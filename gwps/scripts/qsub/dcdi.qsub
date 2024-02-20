@@ -1,0 +1,30 @@
+#!/bin/bash
+#!/bin/bash
+#$ -cwd
+# error = Merged with joblog
+#$ -o logs/joblog.$JOB_ID
+#$ -j y
+#$ -l h_rt=24:00:00,h_data=6G -pe shared 30
+#$ -l highp
+# Email address to notify
+#$ -M asxue@g.ucla.edu
+# Notify when
+#$ -m bea
+
+cd /u/home/a/asxue
+source .bashrc
+conda activate dcdi
+module load R/4.1.0-BIO
+
+cd project-hjp/dotears
+
+python workflow/scripts/dcdi/main.py --train --data-path /u/home/a/asxue/project-hjp/dotears/gwps/dcdi_data \
+                --num-vars 100 \
+                --i-dataset 0 --exp-path /u/home/a/asxue/project-hjp/dotears/gwps/dcdi_train_2 \
+                --model DCDI-DSF --intervention \
+                --intervention-type imperfect \
+                --intervention-knowledge known --reg-coeff 0.1 \
+                --normalize-data
+
+cp /u/home/a/asxue/project-hjp/dotears/gwps/dcdi_train_2/train/DAG.npy /u/home/a/asxue/project-hjp/dotears/gwps/out/top100_dcdi.npy
+

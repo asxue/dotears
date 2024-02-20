@@ -1,0 +1,22 @@
+#!/bin/bash
+#!/bin/bash
+#$ -cwd
+# error = Merged with joblog
+#$ -o logs/joblog.$JOB_ID
+#$ -j y
+#$ -l h_rt=10:00:00,h_data=10G
+#$ -l highp
+# Email address to notify
+#$ -M asxue@g.ucla.edu
+# Notify when
+#$ -m bea
+
+cd /u/home/a/asxue
+source .bashrc
+conda activate std
+
+python /u/home/a/asxue/project-hjp/dotears/workflow/scripts/ut_igsp.py \
+            --data /u/home/a/asxue/project-hjp/dotears/gwps/top100_lognormal.npz \
+            --out /u/home/a/asxue/project-hjp/dotears/gwps/out_lognormal/top100_ut-igsp \
+            --alpha 0.001 \
+            --alpha_inv 0.001

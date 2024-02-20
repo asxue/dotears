@@ -11,3 +11,6 @@ figures/
 workflow/scripts/__pycache__
 .vscode
 notebooks
+gwps/dcdi*
+gwps/scripts/logs
+gwps/scripts/qsub/logs
