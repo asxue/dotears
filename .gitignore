@@ -16,3 +16,4 @@ gwps/scripts/logs
 gwps/scripts/qsub/logs
 gwps/stringdb/*
 RECOMB/
+gwps/scripts/.ipynb_checkpoints/
