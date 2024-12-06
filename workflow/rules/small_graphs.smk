@@ -123,6 +123,18 @@ rule direct_lingam_naive:
         python workflow/scripts/run_naive.py --data {input} --method direct-lingam --out {output}
         """
 
+rule colide_nv_naive:
+    input:
+        join(small_config['output_dir'], 'data/observational/{parent_dir}/sim_{sim}.npz')
+    output:
+        join(small_config['output_dir'], 'out/colide-nv/{parent_dir}/sim_{sim}.npy')
+    conda:
+        '../../workflow/envs/colide-nv.yml'
+    shell:
+        """
+        python workflow/scripts/run_naive.py --data {input} --method colide-nv --out {output}
+        """
+
 rule igsp_naive:
     input:
         join(small_config['output_dir'], 'data/interventional/{parent_dir}/sim_{sim}.npz')

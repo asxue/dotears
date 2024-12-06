@@ -106,5 +106,13 @@
     "write_cv_folds": {
         "memory": "2G",
         "runtime": "6:00:00"
+    },
+    "colide_nv": {
+        "memory": "8G",
+        "runtime": "2:00:00"
+    },
+    "colide_nv_naive": {
+        "memory": "8G",
+        "runtime": "2:00:00"
     }
 }

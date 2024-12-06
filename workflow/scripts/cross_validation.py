@@ -57,6 +57,16 @@ def cv_golem(lambda1, lambda2, train_data, val_data, equal_variances):
     _, val_loss, _, _ = trainer.eval_iter(model, val_data)
     return val_loss
 
+def cv_colide(lambda1, train_data, val_data):
+    sys.path.append('./workflow/scripts')
+    from colide.model import colide_nv
+
+    colide_model = colide_nv()
+    W_hat, Sigma_est = colide_model.fit(train_data, lambda1)
+
+    colide_model.X = val_data
+    return colide_model._score(W_hat, Sigma_est)[0]
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--cv_data', help='folder of data in cv format', type=str)
@@ -99,6 +109,9 @@ if __name__ == '__main__':
 
             if method == 'notears':
                 val_loss = cv_notears(params, train_data['obs'], val_data['obs'])
+
+            if method == 'colide-nv':
+                val_loss = cv_colide(params, train_data['obs'], val_data['obs'])
 
             if method.startswith('golem'):
                 val_loss = cv_golem(params[0], params[1], train_data['obs'], val_data['obs'], equal_variances=(method == 'golem-ev'))
@@ -154,6 +167,14 @@ if __name__ == '__main__':
         inferred_dag = notears_linear(data['obs'],
                        lambda1=lambda1,
                        w_threshold=0)
+
+    if method == 'colide-nv':
+        sys.path.append('./workflow/scripts')
+        from colide.model import colide_nv
+
+        lambda1 = best_performing_parameters['lambda'].values[0]
+        colide_model = colide_nv()
+        inferred_dag, Sigma_est = colide_model.fit(data['obs'], lambda1)
 
     if method.startswith('golem'):
         sys.path.append('./workflow/scripts/golem/src')

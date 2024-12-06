@@ -17,7 +17,7 @@ conda activate golem
 
 cd project-hjp/dotears
 python /u/home/a/asxue/project-hjp/dotears/workflow/scripts/run_naive.py \
-            --data /u/home/a/asxue/project-hjp/dotears/gwps/top100_lognormal.npz \
-            --out /u/home/a/asxue/project-hjp/dotears/gwps/out_lognormal/top100_golem-ev \
+            --data /u/home/a/asxue/project-hjp/dotears/gwps/top100_interventional_concatenated.npz \
+            --out /u/home/a/asxue/project-hjp/dotears/gwps/out_concatenated/top100_golem-ev \
             --lambda1 0.1 \
             --method GOLEM-EV 

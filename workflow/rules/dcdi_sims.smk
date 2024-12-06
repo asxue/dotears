@@ -388,3 +388,28 @@ rule notears_dcdi_sims:
         --out {output} --lambdas {input.lambda1} --method notears --param_out {params.grid_out} \
         --folds {params.n_folds}
         """
+
+rule colide_nv_dcdi_sims:
+    input:
+        data='data/dcdi_sims/data/{prefix}/observational/sim_{sim}.npz',
+        cv_train=expand('data/dcdi_sims/data/{{prefix}}/observational/cv/sim{{sim}}/fold{fold}_train.npz',
+                        fold=range(std_config['n_folds'])),
+        cv_val=expand('data/dcdi_sims/data/{{prefix}}/observational/cv/sim{{sim}}/fold{fold}_val.npz',
+                      fold=range(std_config['n_folds'])),
+        lambda1=config['lambda_file'],
+    output:
+        'data/dcdi_sims/out/{prefix}/colide-nv/sim_{sim}.npy'
+    conda:
+        '../../workflow/envs/colide-nv.yml'
+    params:
+        grid_out='data/dcdi_sims/data/param_grid/colide-nv/{prefix}/sim_{sim}.csv',
+        cv_folder='data/dcdi_sims/data/{prefix}/observational/cv/sim{sim}',
+        n_folds=std_config['n_folds']
+    benchmark:
+        'data/dcdi_sims/benchmarks/colide-nv/{prefix}/sim{sim}.benchmark.txt'
+    shell:
+        """
+        python workflow/scripts/cross_validation.py --cv_data {params.cv_folder} \
+            --data {input.data} --out {output} --lambdas {input.lambda1} --method colide-nv \
+            --param_out {params.grid_out} --folds {params.n_folds}
+        """ 

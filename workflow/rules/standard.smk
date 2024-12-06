@@ -209,3 +209,30 @@ rule ut_igsp:
         """
         python workflow/scripts/ut_igsp.py --data {input}  --out {output} --alpha {params.alpha} --alpha_inv {params.alpha_inv}
         """
+
+rule colide_nv:
+    input:
+        data=join(std_config['output_dir'], 'data/{prefix}/observational/sim_{sim}.npz'),
+        cv_train=expand(join(std_config['output_dir'], 
+                        'data/{{prefix}}/observational/cv/sim{{sim}}/fold{fold}_train.npz'), 
+                        fold=range(std_config['n_folds'])),
+        cv_val=expand(join(std_config['output_dir'],
+                      'data/{{prefix}}/observational/cv/sim{{sim}}/fold{fold}_val.npz'),
+                      fold=range(std_config['n_folds'])),
+        lambda1=config['lambda_file'],
+    output:
+        join(std_config['output_dir'], 'out/{prefix}/colide-nv/sim_{sim}.npy')
+    conda:
+        '../../workflow/envs/colide-nv.yml'
+    params:
+        grid_out=join(std_config['output_dir'], 'data/param_grid/colide-nv/{prefix}/sim_{sim}.csv'),
+        cv_folder=join(std_config['output_dir'], 'data/{prefix}/observational/cv/sim{sim}'),
+        n_folds=std_config['n_folds']
+    benchmark:
+        join(std_config['output_dir'], 'benchmarks/colide-nv/{prefix}/sim{sim}.benchmark.txt')
+    shell:
+        """
+        python workflow/scripts/cross_validation.py --cv_data {params.cv_folder} \
+            --data {input.data} --out {output} --lambdas {input.lambda1} --method colide-nv \
+            --param_out {params.grid_out} --folds {params.n_folds}
+        """

@@ -56,6 +56,12 @@ if __name__ == '__main__':
         model = lingam.DirectLiNGAM()
         model.fit(data['obs'])
         w = model.adjacency_matrix_
+    elif args.method == 'colide-nv':
+        sys.path.append('./workflow/scripts')
+        from colide.model import colide_nv
+
+        colide_model = colide_nv()
+        w, _ = colide_model.fit(data['obs'], args.lambda1)
 
     dirname = os.path.dirname(args.out)
     if not os.path.exists(dirname):

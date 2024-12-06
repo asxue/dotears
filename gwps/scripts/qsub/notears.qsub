@@ -16,5 +16,5 @@ source .bashrc
 conda activate std
 
 python /u/home/a/asxue/project-hjp/dotears/gwps/scripts/notears_gwps.py \
-            --data /u/home/a/asxue/project-hjp/dotears/gwps/top100_lognormal.npz \
-            --out /u/home/a/asxue/project-hjp/dotears/gwps/out_lognormal/top100_notears \
+            --data /u/home/a/asxue/project-hjp/dotears/gwps/top100_interventional_concatenated.npz \
+            --out /u/home/a/asxue/project-hjp/dotears/gwps/out_concatenated/top100_notears \

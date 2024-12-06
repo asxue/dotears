@@ -16,5 +16,5 @@ source .bashrc
 conda activate std
 
 Rscript /u/home/a/asxue/project-hjp/dotears/gwps/scripts/gies_repr.R \
-	--data /u/home/a/asxue/project-hjp/dotears/gwps/top100_lognormal.npz \
-        --out /u/home/a/asxue/project-hjp/dotears/gwps/out_lognormal/top100_gies
+	--data /u/home/a/asxue/project-hjp/dotears/gwps/top100_interventional_concatenated.npz \
+        --out /u/home/a/asxue/project-hjp/dotears/gwps/top100_concatenated/top100_gies
