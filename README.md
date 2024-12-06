@@ -18,6 +18,9 @@ A configuration for cluster engines is given in config/cluster.json. For executi
 
 Experimental data is contained in ./data/. Data for two and three node simulations is contained in ./data/small, while data for large random graphs is in the folders ./data/p50\*. 
 
+## Real Data
+Real data experiments have been added in ./gwps. Some analyses may require external files from either [stringdb](https://string-db.org/) and/or the [Genome-Wide Perturb-Seq](https://gwps.wi.mit.edu/)
+
 ## Configuration
 The folder ./config gives the global configuration file ./config/config.yml, which includes the path to the lambda grid for cross validation as well as alpha and alphainv. alpha and alphainv are parameters for running UT-IGSP and IGSP, and does not have any relation to $\alpha$ in the paper.
 
@@ -30,11 +33,10 @@ Data to run DCDI-G is formatted differently (see workflow/scripts/convert\_data\
 
 ## Training
 
-To train dotears, run this command (see workflow/rules/standard.smk for cross-validation run on separate data instance)
+For convenience, the standard dotears script has been provided at ./dotears.py. To train dotears, run this command (see workflow/rules/standard.smk for cross-validation run on separate data instance)
 
 ```train
-python ./workflow/scripts/dotears.py --data {path-to-npz-data-file} --lambda1 {regularization-parameter} --out {path-to-npy-output}
+python dotears.py --data {path-to-npz-data-file} --lambda1 {regularization-parameter} --out {path-to-npy-output}
 ```
 
-See workflow/scripts/dotears.py for full implementation.
 
